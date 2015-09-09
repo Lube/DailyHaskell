@@ -5,23 +5,17 @@ import Data.Char
 
 data Cell = Cell Int deriving (Show)
 
-getValue  :: Cell -> Int  
-getValue  (Cell val) = val  
-  
 xor a b = mod ( a + b ) 2
 
-prettyprint 0 = '_'
-prettyprint 1 = 'x'
+prettyprint ((Cell 1):xs) = 'x' : prettyprint xs
+prettyprint ((Cell _):xs) = '_' : prettyprint xs
+prettyprint _ = []
 
 computeNextValue (Cell a) (Cell b) = Cell (xor a b)
 
-printNGenerationsFromString n s = printNGenerations n (map Cell ([0] ++ map digitToInt s ++ [0])) 
+computeNextGeneration ca = [  Cell (xor a c) | (Cell a):b:(Cell c):_<- tails ([Cell 0]++ca++[Cell 0])]
 
-printNGenerations 0 _ = putStrLn ""
-printNGenerations n ca = do 
-		putStrLn $ map prettyprint (currentValues ca)
-		printNGenerations (n - 1) (computeNextGeneration ca)
-
-currentValues ca = [ getValue cell | cell <- init(tail(ca)) ]
-
-computeNextGeneration ca = [Cell 0] ++ [computeNextValue (ca!!(i - 1)) (ca!!(i + 1))  | i <- [1..(length ca - 2)]] ++ [Cell 0]
+getNComputedGenerations n cells = take n (iterate computeNextGeneration cells)
+									
+prettyprintGenerations n s = mapM_ (putStrLn . prettyprint) (getNComputedGenerations n cells)
+							where cells = map (Cell . digitToInt) s 
