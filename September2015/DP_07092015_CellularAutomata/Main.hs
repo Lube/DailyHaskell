@@ -3,12 +3,12 @@ module CA where
 import Data.List
 import Data.Char
 
-data Cell = Cell Int deriving (Show)
+newtype Cell = Cell Int deriving (Show)
 
 xor a b = mod ( a + b ) 2
 
 prettyprint ((Cell 1):xs) = 'x' : prettyprint xs
-prettyprint ((Cell _):xs) = '_' : prettyprint xs
+prettyprint ((Cell _):xs) = ' ' : prettyprint xs
 prettyprint _ = []
 
 computeNextValue (Cell a) (Cell b) = Cell (xor a b)
