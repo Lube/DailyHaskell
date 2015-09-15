@@ -3,10 +3,7 @@ module CA where
 import Data.List
 import Data.Char
 
-data Cell = Cell Int deriving (Show)
-
-getValue  :: Cell -> Int  
-getValue  (Cell val) = val  
+data Cell = Cell { value :: Int } deriving (Show)
   
 xor a b = mod ( a + b ) 2
 
@@ -15,13 +12,13 @@ prettyprint 1 = 'x'
 
 computeNextValue (Cell a) (Cell b) = Cell (xor a b)
 
-printNGenerationsFromString n s = printNGenerations n (map Cell ([0] ++ map digitToInt s ++ [0])) 
+printNGenerationsFromString n s = printNGenerations n (map Cell (map digitToInt s)) 
 
 printNGenerations 0 _ = putStrLn ""
 printNGenerations n ca = do 
 		putStrLn $ map prettyprint (currentValues ca)
 		printNGenerations (n - 1) (computeNextGeneration ca)
 
-currentValues ca = [ getValue cell | cell <- init(tail(ca)) ]
+currentValues = map value . init . tail
 
-computeNextGeneration ca = [Cell 0] ++ [computeNextValue (ca!!(i - 1)) (ca!!(i + 1))  | i <- [1..(length ca - 2)]] ++ [Cell 0]
+computeNextGeneration ca = [ computeNextValue a c  | a:b:c:_<- tails ([Cell 0]++ca++[Cell 0])]
