@@ -3,22 +3,20 @@ module CA where
 import Data.List
 import Data.Char
 
-data Cell = Cell { value :: Int } deriving (Show)
-  
+newtype Cell = Cell Int deriving (Show)
+
+
 xor a b = mod ( a + b ) 2
 
-prettyprint 0 = '_'
-prettyprint 1 = 'x'
+prettyprint ((Cell 1):xs) = 'x' : prettyprint xs
+prettyprint ((Cell _):xs) = ' ' : prettyprint xs
+prettyprint _ = []
 
 computeNextValue (Cell a) (Cell b) = Cell (xor a b)
 
-printNGenerationsFromString n s = printNGenerations n (map Cell (map digitToInt s)) 
+computeNextGeneration ca = [  Cell (xor a c) | (Cell a):b:(Cell c):_<- tails ([Cell 0]++ca++[Cell 0])]
 
-printNGenerations 0 _ = putStrLn ""
-printNGenerations n ca = do 
-		putStrLn $ map prettyprint (currentValues ca)
-		printNGenerations (n - 1) (computeNextGeneration ca)
-
-currentValues = map value . init . tail
-
-computeNextGeneration ca = [ computeNextValue a c  | a:b:c:_<- tails ([Cell 0]++ca++[Cell 0])]
+getNComputedGenerations n cells = take n (iterate computeNextGeneration cells)
+									
+prettyprintGenerations n s = mapM_ (putStrLn . prettyprint) (getNComputedGenerations n cells)
+							where cells = map (Cell . digitToInt) s 
