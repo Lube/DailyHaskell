@@ -1,14 +1,31 @@
 import Data.Char
+import Data.String.Utils
 import Control.Monad
 
-main = do
+{-main = do
     input <- getLine
     inputs <- replicateM (read input) getLine
-    print $ isPalindrome inputs
+    print $ diagonalized inputs-}
 
-isPalindrome inputs 
+maze = ["+-+-+-+-+-+",
+		"  |       |",
+		"+ +-+-+ + +",
+		"| |     | |",
+		"+ + + + + +",
+		"|   | |   |",
+		"+-+-+ +-+-+",
+		"|     |   |",
+		"+ + +-+ + +",
+		"| |     |  ",
+		"+-+-+-+-+-+"]
+
+{-model maze = replace "-|+" "\\/" maze
+
+
+
+diagonalized inputs 
                 |original == reves   =  "Es Palindromo"
                 |otherwise           =  "No es Palindromo"
                     where input    = map toLower (concat inputs)
                           original = filter isLetter input
-                          reves    = reverse original
+                          reves    = reverse original-}
