@@ -5,6 +5,7 @@ import Data.Char
 
 newtype Cell = Cell Int deriving (Show)
 
+
 xor a b = mod ( a + b ) 2
 
 prettyprint ((Cell 1):xs) = 'x' : prettyprint xs
